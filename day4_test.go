@@ -101,10 +101,6 @@ func TestDay4Part1(t *testing.T) {
 			}
 		}
 
-		for _, line := range sortedLog {
-			fmt.Printf("Time %+v  -- Messgae |%+v|\n", line.Timestamp, line.Message)
-		}
-
 		testLog := sortedLog
 
 		guardGaps := make(map[int]int)
@@ -112,7 +108,6 @@ func TestDay4Part1(t *testing.T) {
 			currentGap := guardGaps[testLog[i].Message.ID]
 			newGap := testLog[i+1].Timestamp.Minute() - testLog[i].Timestamp.Minute()
 			guardGaps[testLog[i].Message.ID] = currentGap + newGap
-			fmt.Printf("Gap for Guard %v is %v\n", testLog[i].Message.ID, newGap)
 		}
 		max := 0
 		maxGuard := -1
@@ -223,10 +218,6 @@ func TestDay4Part2(t *testing.T) {
 			}
 		}
 
-		for _, line := range sortedLog {
-			fmt.Printf("Time %+v  -- Messgae |%+v|\n", line.Timestamp, line.Message)
-		}
-
 		testLog := sortedLog
 
 		guardGaps := make(map[int]int)
@@ -234,7 +225,6 @@ func TestDay4Part2(t *testing.T) {
 			currentGap := guardGaps[testLog[i].Message.ID]
 			newGap := testLog[i+1].Timestamp.Minute() - testLog[i].Timestamp.Minute()
 			guardGaps[testLog[i].Message.ID] = currentGap + newGap
-			fmt.Printf("Gap for Guard %v is %v\n", testLog[i].Message.ID, newGap)
 		}
 		minuteMap := make(map[GuardMinuteKey]int)
 		for i := 0; i < len(testLog); i = i + 2 {
@@ -260,9 +250,9 @@ func TestDay4Part2(t *testing.T) {
 	assert.Equal(t, 45, testGuard.Minute)
 
 	puzzleGuard := findGuard(day4Input)
-	assert.Equal(t, 10, puzzleGuard.Guard)
-	assert.Equal(t, 24, puzzleGuard.Minute)
-	assert.Equal(t, 1, puzzleGuard.Guard*puzzleGuard.Minute)
+	assert.Equal(t, 1597, puzzleGuard.Guard)
+	assert.Equal(t, 30, puzzleGuard.Minute)
+	assert.Equal(t, 47910, puzzleGuard.Guard*puzzleGuard.Minute)
 
 }
 
