@@ -19,14 +19,14 @@ func nextTurn(gameBoard []int, currentMarbleIndex int, newMarble int) ([]int, in
 		playersScore += newMarble
 		breakPoint := currentMarbleIndex - 7
 		if breakPoint <= 0 {
-			breakPoint = 7 - currentMarbleIndex
+			breakPoint += len(gameBoard)
 		}
 		playersScore += gameBoard[breakPoint]
 
 		newGameBoard := make([]int, 0)
 		newGameBoard = append(newGameBoard, gameBoard[0:breakPoint]...)
 		newGameBoard = append(newGameBoard, gameBoard[breakPoint+1:]...)
-		fmt.Printf("For marble %d. breakPoint is %d currentMarbleIndex is %d\n", newMarble, breakPoint, currentMarbleIndex)
+		//		fmt.Printf("For marble %d. breakPoint is %d currentMarbleIndex is %d\n", newMarble, breakPoint, currentMarbleIndex)
 		return newGameBoard, breakPoint, playersScore
 	}
 	breakPoint := currentMarbleIndex + 2
@@ -85,8 +85,14 @@ func TestTurn(t *testing.T) {
 	assert.Equal(t, 19, whenGameBoard[whenMarbleIndex])
 	assert.Equal(t, 32, roundScore)
 
-	//[   91] [ 0]   0  90  39 (91) 16  40  8  41 42 4 47 43 48 18 49 44 50 19 51 45 52 2 53 24 54 20 55 25 56 10 57 26 58 21 59 27     60      5     61     28     62     22     63     29     64     65     30     70     66     71      1     72     67     73     31     74     68     75     12     76     32     77      6     78     33     79     13     80     34     81      3     82     35     83     14     84     36     85      7     86     37     87     15     88     38     89
-	//[   92] [ 1]      0     90     39     91     16     40      8     41     42      4     47     43     48     18     49     44     50     19     51     45     52      2     53     24     54     20     55     25     56     10     57     26     58     21     59     27     60      5     61     28     62     22     63     29     64     65     30     70     66     71      1     72     67     73     31     74     68     75     12     76     32     77      6     78     33     79     13     80     34     81      3     82     35     83     14     84     36     85      7     86     37 (   15)    88     38     89
+	givenBoard = []int{0, 90, 39, 91, 16, 40, 8, 41, 42, 4, 47, 43, 48, 18, 49, 44, 50, 19, 51, 45, 52, 2, 53, 24, 54, 20, 55, 25, 56, 10, 57, 26, 58, 21, 59, 27, 60, 5, 61, 28, 62, 22, 63, 29, 64, 65, 30, 70, 66, 71, 1, 72, 67, 73, 31, 74, 68, 75, 12, 76, 32, 77, 6, 78, 33, 79, 13, 80, 34, 81, 3, 82, 35, 83, 14, 84, 36, 85, 7, 86, 37, 87, 15, 88, 38, 89}
+	andCurrentIndex = 3
+	whenGameBoard, whenMarbleIndex, roundScore = nextTurn(givenBoard, andCurrentIndex, 92)
+
+	assert.Equal(t, []int{0, 90, 39, 91, 16, 40, 8, 41, 42, 4, 47, 43, 48, 18, 49, 44, 50, 19, 51, 45, 52, 2, 53, 24, 54, 20, 55, 25, 56, 10, 57, 26, 58, 21, 59, 27, 60, 5, 61, 28, 62, 22, 63, 29, 64, 65, 30, 70, 66, 71, 1, 72, 67, 73, 31, 74, 68, 75, 12, 76, 32, 77, 6, 78, 33, 79, 13, 80, 34, 81, 3, 82, 35, 83, 14, 84, 36, 85, 7, 86, 37, 87, 88, 38, 89}, whenGameBoard)
+	assert.Equal(t, 82, whenMarbleIndex)
+	assert.Equal(t, 88, whenGameBoard[whenMarbleIndex])
+	assert.Equal(t, 107, roundScore)
 
 }
 
@@ -105,7 +111,7 @@ func printfBoard(round int, board []int, currentIndex int, roundScore int, curre
 func TestDay9Part1(t *testing.T) {
 
 	gameScoreCalc := func(playerCount, turns int) int {
-		fmt.Printf("NEW GAME\n")
+		//fmt.Printf("NEW GAME\n")
 		players := make([]int, playerCount)
 		currentPlayer := 0
 		board := []int{0}
@@ -113,7 +119,7 @@ func TestDay9Part1(t *testing.T) {
 		for i := 1; i <= turns; i++ {
 			roundScore := 0
 			board, currentIndex, roundScore = nextTurn(board, currentIndex, i)
-			printfBoard(i, board, currentIndex, roundScore, currentPlayer)
+			//			printfBoard(i, board, currentIndex, roundScore, currentPlayer)
 			players[currentPlayer] += roundScore
 			if currentPlayer >= playerCount-1 {
 				currentPlayer = 0
@@ -123,21 +129,23 @@ func TestDay9Part1(t *testing.T) {
 		}
 
 		sort.Ints(players)
-		for player, value := range players {
-			fmt.Printf("Player %d with value %d\n", player, value)
-		}
+		//	for player, value := range players {
+		//		fmt.Printf("Player %d with value %d\n", player, value)
+		//	}
 
 		return players[playerCount-1]
 	}
 
-	//	assert.Equal(t, 32, gameScoreCalc(9, 25))
-	//	assert.Equal(t, 8317, gameScoreCalc(10, 1618))
-	//assert.Equal(t, 63, gameScoreCalc(3, 47))
+	assert.Equal(t, 32, gameScoreCalc(9, 25))
+	assert.Equal(t, 8317, gameScoreCalc(10, 1618))
+	assert.Equal(t, 63, gameScoreCalc(3, 47))
 	assert.Equal(t, 95, gameScoreCalc(23, 47))
-	//	assert.Equal(t, 146373, gameScoreCalc(13, 7999))
-	//	assert.Equal(t, 2764, gameScoreCalc(17, 1104))
-	//	assert.Equal(t, 54718, gameScoreCalc(21, 6111))
-	//	assert.Equal(t, 37305, gameScoreCalc(30, 5807))
+	assert.Equal(t, 165, gameScoreCalc(10, 118))
+	assert.Equal(t, 146373, gameScoreCalc(13, 7999))
+	assert.Equal(t, 2764, gameScoreCalc(17, 1104))
+	assert.Equal(t, 54718, gameScoreCalc(21, 6111))
+	assert.Equal(t, 37305, gameScoreCalc(30, 5807))
+	assert.Equal(t, 398048, gameScoreCalc(458, 71307))
 }
 
 func TestDay9Part2(t *testing.T) {
